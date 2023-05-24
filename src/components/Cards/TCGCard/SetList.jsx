@@ -1,29 +1,25 @@
 import React, { useState, useEffect } from "react";
 import { TbPokeball } from "react-icons/tb";
-import TCGCard from "./Card";
+import Set from "./Set";
+
 import { TextInput } from "flowbite-react";
 const CardList = () => {
-	const [tcgList, setTCGList] = useState(null);
+	const [setList, setSetList] = useState(null);
 
 	// Nos conectamos a la api para recoger los datos en JSON
 	useEffect(() => {
-		fetch("https://api.pokemontcg.io/v2/cards?pageSize=20", {
+		fetch("https://api.pokemontcg.io/v2/sets", {
 			headers: {
 				"X-Api-Key": process.env.TCG_API,
 			},
 		})
 			.then((response) => response.json())
 			.then((data) => {
-				if (data.data !== null) {
-					setTCGList(null);
-					setTCGList(data.data);
-				} else {
-					setTCGList(null);
-				}
+				setSetList(data.data);
 			});
 	}, []);
 
-	function searchByName(search) {
+	/*function searchByName(search) {
 		if (search) {
 			fetch(
 				`https://api.pokemontcg.io/v2/cards?pageSize=20&q=name:${search}*`,
@@ -49,9 +45,9 @@ const CardList = () => {
 		if (event.key === "Enter") {
 			searchByName(event.target.value);
 		}
-	};
+	};*/
 
-	if (!tcgList) {
+	if (!setList) {
 		return (
 			<section className="absolute h-full left-0 right-0 pt-52 top-0 ps-40 bg-white dark:bg-gray-900">
 				<div className="py-8 px-4 flex flex-col items-center text-center lg:py-16 lg:px-12">
@@ -67,7 +63,7 @@ const CardList = () => {
 		);
 	}
 
-	const listLenght = tcgList.length;
+	/*const listLenght = setList.length;*/
 
 	return (
 		<div className="dark:white-text p-4">
@@ -82,7 +78,6 @@ const CardList = () => {
 					</p>
 				</div>
 			</section>
-
 			<section class="bg-gray-50 dark:bg-gray-900 flex items-center mb-4">
 				<div class="w-full">
 					<div class="relative bg-white shadow-md dark:bg-gray-800 sm:rounded-lg">
@@ -278,7 +273,7 @@ const CardList = () => {
 				</div>
 			</section>
 
-			{
+			{/*
 				<div className="p-4 dark:white-text">
 					<div className="mt-4">
 						<TextInput
@@ -311,7 +306,12 @@ const CardList = () => {
 						<TCGCard id={key} tcgCardID={tcg.id} />
 					))}
 				</div>
-			)}
+			)*/}
+			<div className="px-4 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+				{setList.map((set, key) => (
+					<Set id={key} setID={set.id} />
+				))}
+			</div>
 		</div>
 	);
 };
